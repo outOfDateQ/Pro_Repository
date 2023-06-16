@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登录页面</title>
+    <link rel="stylesheet" href="../css/reset.css">
+    <link rel="stylesheet" href="../css/login.css">
+    <script src="../js/axios.js"></script>
+    <script src="../js/vue.js"></script>
+</head>
+
+<body>
+    <div class="zz"></div>
+    <div id="login">
+        <div class="loginTop">
+            <span class="loginTop-span1">登录掘金畅享更多权益</span>
+            <span class="loginTop-span2" @click="backIndex">×</span>
+        </div>
+
+        <div class="line"></div>
+
+        <div class="loginUnder">
+            <div class="mm">立即登录</div>
+            <div class="loginUnder-form">
+                <div class="form-item">
+                    <input @focus="focus" @blur="blur" :class="{ani1: isFocus}" type="text" id="account"
+                        v-model="account" placeholder="请输入账号">
+                </div>
+                <div class="form-item">
+                    <input @focus="focus" @blur="blur" :class="{ani2: isFocus}" type="password" id="password"
+                        v-model="password" placeholder="请输入密码">
+                </div>
+                <div class="form-item">
+                    <button @click="login">登录</button>
+                </div>
+            </div>
+            <div class="other">
+                <a class="other-span1">其他登录</a>
+                <a href="../html/register.html" class="other-span2">注册</a>
+            </div>
+            <div class="bottom">
+                <span>注册登录即表示同意 <span style="color: #1e80ff;">用户协议</span> 和 <span
+                        style="color: #1e80ff;">隐私政策</span></span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        new Vue({
+            el: '#login',
+            data() {
+                return {
+                    account: '',
+                    password: '',
+                    isFocus: false
+                }
+            },
+            mounted() {
+                if (!localStorage.act) {
+                    return
+                }
+                this.account = localStorage.act
+            },
+
+            methods: {
+
+                focus() {
+                    this.isFocus = true
+                },
+
+                blur() {
+                    this.isFocus = false
+                },
+
+                backIndex() {
+                    location.href = '../html/homepage.html'
+                },
+
+                async login() {
+                    if (!this.account || !this.password) {
+                        return alert('账号或密码不能为空')
+                    }
+                    let { data: { code, data: userinfo, msg } } = await axios({
+                        method: 'POST',
+                        url: 'http://127.0.0.1:4000/api/login',
+                        data: {
+                            account: this.account,
+                            password: this.password
+                        },
+                        headers: {
+                            'Content-Type': 'application/json;cahrset=utf-8'
+                        }
+                    })
+                    if (code === 400) {
+                        alert(msg)
+                        this.account = ''
+                        this.password = ''
+                        return
+                    }
+                    // console.log(1111)
+                    // // let token = res.data.data.token
+                    // // let id = res.data.data.id
+
+
+                    // 将Token保存到localStorage中
+                    const user = JSON.stringify(userinfo)
+                    localStorage.removeItem('act')
+                    localStorage.setItem('token', userinfo.token)
+                    localStorage.setItem('userinfo', user)
+                    localStorage.setItem('id', userinfo.id)
+                    // 登录成功, 返回首页
+                    location.href = '../html/homepage.html'
+                    // location.replace('../html/homepage.html')
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>

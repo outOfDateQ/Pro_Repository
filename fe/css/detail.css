@@ -1,0 +1,320 @@
+#detail .main {
+  margin-top: 7rem;
+}
+
+#detail .main .container {
+  width: 1000px;
+  margin: 0 auto;
+}
+
+#detail .main .container .article {
+  padding: 32px;
+  background-color: #fff;
+}
+
+#detail .main .container .article .article-title {
+  font-size: 42px;
+  margin: 10px 0;
+}
+
+#detail .main .container .article .author-container {
+  display: flex;
+  margin: 20px 0 30px 0;
+}
+
+#detail .main .container .article .author-info {
+  font-size: 16px;
+}
+
+#detail .main .container .article .article-time {
+  color: #8a919f;
+  font-size: 14px;
+  margin-top: 6px;
+}
+
+#detail .main .container .article .avatar-wrap {
+  width: 40px;
+  height: 40px;
+  overflow: hidden;
+  border-radius: 50%;
+  /* background-color: #233; */
+  margin-right: 10px;
+}
+
+#detail .main .container .article .avatar-wrap img {
+  width: 100%;
+  height: 100%;
+}
+
+#detail .main .container .article .article-content {
+  padding: 2rem 0;
+  font-size: 1.6rem;
+  line-height: 2.4rem;
+}
+
+#detail .main .article .article-image {
+  overflow: hidden;
+}
+
+.top-nav {
+  position: relative;
+  top: 0;
+  width: 100%;
+  position: fixed;
+  height: 60px;
+  z-index: 99;
+  background-color: #FFFFFF;
+  box-shadow: 0 0px 6px 6px rgba(197, 197, 197, 0.3);
+}
+
+.top-nav .box {
+  max-width: 1400px;
+  display: flex;
+  padding: 0 24px;
+  align-items: center;
+  position: relative;
+  justify-content: space-between;
+  margin: 0 auto;
+}
+
+/* 菜单 */
+.top-nav .box .menu {
+  position: absolute;
+  right: 60px;
+  top: 70px;
+  overflow: hidden;
+  background-color: #fff;
+  height: 130px;
+  width: 200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  border-radius: 4px;
+  transition: all .3s ease;
+  transform-origin: 100% 0;
+  transform: scale(0);
+  box-shadow: 0 0 4px 4px rgba(0, 0, 0, 0.1);
+}
+
+.top-nav .box .menu .user-info {
+  display: flex;
+  align-items: center;
+}
+
+.top-nav .box .menu .user-info .username {
+  font-size: 14px;
+  color: #252933;
+}
+
+.top-nav .box .menu .user-info .menu-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.top-nav .box .menu .bottom-box {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  width: 90%;
+}
+
+.top-nav .box .menu .bottom-box div {
+  width: 70px;
+  height: 30px;
+  text-align: center;
+  line-height: 30px;
+  color: #252933;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.top-nav .box .menu .bottom-box div:hover {
+  background-color: #F7F8FA;
+  border-radius: 4px;
+}
+
+
+.top-nav .box .left {
+  display: flex;
+  align-items: center;
+  min-width: 500px;
+}
+
+.top-nav .box .left .logo-box {
+  margin-right: 12px;
+  width: 107px;
+}
+
+.top-nav .box .left .logo-box img {
+  width: 100%;
+  vertical-align: bottom;
+}
+
+.top-nav .box .left .nav-list {
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.top-nav .box .left .nav-list li {
+  position: relative;
+  font-size: 14px;
+  cursor: pointer;
+  width: 50px;
+  min-width: 50px;
+  height: 100%;
+  text-align: center;
+  line-height: 60px;
+  color: #515767;
+  list-style-type: none;
+  transition: all 0.3s ease;
+}
+
+.top-nav .box .left .nav-list li::after {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 2px;
+  background-color: #1E80FF;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 0;
+  transition: width 0.3s ease;
+}
+
+.top-nav .box .left .nav-list li:hover {
+  color: #252933;
+}
+
+.top-nav .box .left .nav-list li:hover::after {
+  width: 100%;
+}
+
+.top-nav .box .right {
+  display: flex;
+  align-items: center;
+}
+
+.top-nav .box .right .search-box {
+  margin-right: 25px;
+  overflow: hidden;
+  width: 700px;
+  max-width: 700px;
+  height: 38px;
+  position: relative;
+}
+
+.top-nav .box .right .search-box .search-input {
+  display: flex;
+  width: 260px;
+  border: 1px solid #D5D9DF;
+  border-radius: 4px;
+  overflow: hidden;
+  position: absolute;
+  left: 325px;
+  height: inherit;
+  transition: all 0.3s ease-in;
+}
+
+.top-nav .box .right .search-box .search-input input {
+  flex: 1;
+  padding: 7.2px 6px 7.2px 12px;
+  outline: none;
+  border: none;
+  cursor: text;
+  color: #252933;
+  font-size: 14px;
+}
+
+.top-nav .box .right .search-box .search-input input::placeholder {
+  color: #898B91;
+}
+
+.top-nav .box .right .search-box .search-input .search-icon {
+  width: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 18px;
+  background-color: #F2F3F5;
+  color: #515767;
+  transition: all 0.3s ease-in;
+}
+
+.top-nav .box .right .search-box .create-article {
+  width: 95px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 14px;
+  color: #fff;
+  background-color: #1E80FF;
+  border-radius: 4px;
+  cursor: pointer;
+  position: absolute;
+  right: 0;
+  height: inherit;
+  transition-property: right, background-color;
+  transition-duration: 0.3s;
+  transition-timing-function: ease-in;
+  overflow: hidden;
+}
+
+.top-nav .box .right .search-box .create-article:hover {
+  background-color: #1171EE;
+}
+
+.top-nav .box .right .login-box {
+  cursor: pointer;
+  width: 95px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid #B3D5FF;
+  border-radius: 4px;
+  background-color: #F4F9FF;
+  color: #007FFF;
+  font-size: 14px;
+  height: 38px;
+}
+
+.top-nav .box .right .login-box .line {
+  width: 1px;
+  margin: 0 6px;
+  height: 12px;
+  background-color: #ABCDFF;
+  transform: translateY(1px);
+}
+
+.top-nav .box .right .avatar-box {
+  width: 40px;
+  height: 40px;
+  overflow: hidden;
+  border-radius: 50%;
+  background-color: #F2F3F5;
+}
+
+.top-nav .box .right .avatar-box img {
+  width: 100%;
+  vertical-align: bottom;
+  border-radius: 50%;
+}
+
+@media screen and (max-width: 1200px) {
+  #detail .main .container {
+    width: 100%;
+  }
+
+  #detail .main .container .article {
+    padding: 20px;
+  }
+
+  #detail .main .container .article .article-title {
+    font-size: 32px;
+  }
+}
+
+/*# sourceMappingURL=detail.css.map */

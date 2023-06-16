@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>注册页面</title>
+    <link rel="stylesheet" href="../css/reset.css">
+    <link rel="stylesheet" href="../css/register.css">
+    <script src="../js/axios.js"></script>
+    <script src="../js/vue.js"></script>
+</head>
+
+<body>
+    <div class="zz"></div>
+    <div id="reg">
+        <div class="regTop">
+            <span class="regTop-span1">登录掘金畅享更多权益</span>
+            <span class="regTop-span2" @click="backIndex">×</span>
+        </div>
+
+        <div class="line"></div>
+
+        <div class="regUnder">
+            <div class="mm">用户注册</div>
+            <div class="regUnder-form">
+                <div class="form-item">
+                    <input type="text" v-model="account" placeholder="请输入账号">
+                </div>
+                <div class="form-item">
+                    <input type="password" v-model="password" placeholder="请输入密码">
+                </div>
+                <div class="form-item">
+                    <input type="password" v-model="confirmPassword" placeholder="请再次输入密码">
+                </div>
+                <div class="key">
+                    <input type="checkbox" v-model="check">
+                    <span>我已阅读并同意<span style="color: #1e80ff;">《用户服务协议》《隐私服务条款》</span></span>
+                </div>
+                <div class="form-item">
+                    <button @click="register">立即注册</button>
+                </div>
+            </div>
+            <div class="bottom">
+                <span>已有账号？ <a href="./login.html" style="color: #1e80ff;">立即登录</a></span>
+            </div>
+        </div>
+    </div>
+    <script>
+        new Vue({
+            el: '#reg',
+            data() {
+                return {
+                    account: '',
+                    password: '',
+                    confirmPassword: '',
+                    check: false
+                }
+            },
+            methods: {
+                backIndex() {
+                    location.href = '../html/homepage.html'
+                },
+
+                async register() {
+                    if (!this.account || !this.password) {
+                        return alert('账号或密码不能为空')
+                    }
+                    if (this.confirmPassword !== this.password) {
+                        alert('两次输入的密码不一致')
+                        this.confirmPassword = ''
+                        return
+                    }
+                    if (this.account.length < 5) {
+                        return alert('账号长度不能低于5位')
+                    }
+                    if (this.password.length < 8) {
+                        return alert('账号长度不能低于8位')
+                    }
+                    if (this.check == false) {
+                        return alert('未勾选服务协议条款')
+                    }
+
+                    let res = await axios({
+                        method: 'POST',
+                        url: 'http://127.0.0.1:4000/api/register',
+                        data: {
+                            account: this.account,
+                            password: this.password
+                        },
+                        headers: {
+                            'Content-Type': 'application/json;cahrset=utf-8'
+                        }
+                    })
+
+                    let { code, msg, data } = res.data;
+                    if (code == 400) {
+                        alert(msg)
+                        this.account = ''
+                        this.password = ''
+                        this.confirmPassword = ''
+                        return
+                    }
+
+                    localStorage.act = this.account
+                    localStorage.user = JSON.stringify(data)
+                    location.href = './login.html'
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>

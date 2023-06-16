@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>写文章</title>
+  <link href="https://cdn.bootcdn.net/ajax/libs/element-ui/2.15.13/theme-chalk/index.css" rel="stylesheet">
+  <link href="https://unpkg.com/@wangeditor/editor@latest/dist/css/style.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css" />
+  <link rel="stylesheet" href="../css/editor.css">
+  <style>
+    [v-cloak] {
+      display: none;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="write" v-cloak>
+    <div id="header">
+      <div class="left">
+        <input type="text" v-model="articleTitle" placeholder="输入文章标题..." />
+      </div>
+      <div class="right">
+        <el-dropdown trigger="click">
+          <el-button type="primary">
+            发布文章
+          </el-button>
+          <el-dropdown-menu slot="dropdown" class="dropdown-menu">
+            <div class="header">
+              <h3 class="title">发布文章</h3>
+            </div>
+            <div class="category">
+              <div class="left"><span style="color: red;">*</span>分类</div>
+              <div class="right">
+                <div
+                  class="category-item"
+                  :class="{ active: currCategory == item.title }" 
+                  :key="item.id" v-for="item of category"
+                  @click="handleChangeCategory(item.title)"
+                >
+                  {{ item.title }}
+                </div>
+              </div>
+            </div>
+            <div class="upload-img">
+              <div class="left">
+                文章封面
+              </div>
+              <div class="right">
+                <el-upload 
+                  class="coverimg-uploader" 
+                  action="#"
+                  :show-file-list="false" 
+                  :before-upload="handleUploadBefore" 
+                  :http-request="handleUpload">
+                  <img v-if="imageUrl" :src="imageUrl" class="cover-img">
+                  <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                </el-upload>
+              </div>
+            </div>
+            <div class="btn-wrapper">
+              <el-dropdown-item>
+                <el-button @click="handleCancelPublish">取消</el-button>
+              </el-dropdown-item>
+              <el-dropdown-item>
+                <el-button type="primary" @click="handlePublish">确定并发布</el-button>
+              </el-dropdown-item>
+            </div>
+          </el-dropdown-menu>
+        </el-dropdown>
+        <div class="btn-toggle" @click="handleSwtichEditor">
+          <svg data-v-151232ea="" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path data-v-151232ea="" d="M4.7998 9.6001L19.1998 9.6001L15.1998 5.6001" stroke="#86909C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+            <path data-v-151232ea="" d="M19.1997 14.3999L4.79971 14.3999L8.79971 18.3999" stroke="#86909C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            </path>
+          </svg>
+        </div>
+        <div class="avatar">
+          <el-dropdown trigger="click" @command="handleUserBoxClick">
+            <span class="el-dropdown-link">
+              <el-avatar :src="user?.userAvatar"></el-avatar>
+            </span>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item command="goToPersonPage">个人主页</el-dropdown-item>
+              <el-dropdown-item command="logout">退出登录</el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
+        </div>
+      </div>
+    </div>
+    <div class="editor-container">
+      <template v-if="showMarkdown">
+        <markdown-editor @change="handleEditorChange"></markdown-editor>
+      </template>
+      <template v-else>
+        <wang-editor @change="handleEditorChange"></wang-editor>
+      </template>
+    </div>
+  </div>
+
+  <script src="../js/axios.js"></script>
+  <script src="../js/vue.js"></script>
+  <script src="../js/elementui.js"></script>
+  <script src="../js/toastui-editor.js"></script>
+  <script src="../js/zh-cn.js"></script>
+  <script src="../js/wang-editor.js"></script>
+  <script src="../js/editor.js" type="module"></script>
+</body>
+
+</html>

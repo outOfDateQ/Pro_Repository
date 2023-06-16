@@ -1,0 +1,214 @@
+* {
+  font-family: "微软雅黑";
+}
+
+#allBox {
+  width: 100%;
+  height: 100%;
+}
+
+.header {
+  position: relative;
+  width: 100%;
+  height: 16vh;
+  /* height: 60px; */
+  /* background: firebrick; */
+}
+
+.title {
+  width: 100%;
+  height: 9vh;
+  /* background: skyblue; */
+}
+
+.title > input:first-child {
+  width: 50%;
+  height: 6vh;
+  font-size: 5vh;
+  line-height: 9vh;
+  outline: none;
+  /* display: flex; */
+  border: 0;
+  /* border: 1px solid red; */
+  transform: translateX(8vh) translateY(2vh);
+}
+
+.title > select {
+  width: 10vh;
+  height: 5vh;
+  font-size: 3vh;
+  transform: translateX(20vh) translateY(2vh);
+}
+
+.inputImg {
+  width: 100%;
+  height: 50vh;
+  display: flex;
+  /* line-height: 5vh; */
+  /* transform: translateX(30vh) ; */
+}
+
+.fileChange {
+  width: 15vh;
+  height: 5vh;
+  opacity: 0;
+  display: none;
+  transform: translateX(30vh);
+}
+
+.title > button {
+  height: 5vh;
+  padding: 1vh 3vh;
+  font-size: 2vh;
+  line-height: 3vh;
+  border: 1px solid #1d7dfa;
+  border-radius: 0.5vh;
+  float: right;
+  transform: translate(-20vh, 2vh);
+  cursor: pointer;
+  /*当光标在button上时，光标改为小手*/
+  color: #fff;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  background-color: #1d7dfa;
+}
+
+.userImg {
+  width: 5vh;
+  height: 5vh;
+  transform: translate(25vh, 2vh);
+  border-radius: 50%;
+  float: right;
+}
+
+.icon {
+  width: 100%;
+  height: 4vh;
+  background: salmon;
+}
+
+.context {
+  width: 100%;
+  height: 87vh;
+  display: flex;
+}
+
+.write {
+  width: 50%;
+  height: 87vh;
+}
+
+.textBox {
+  width: 100%;
+  height: 87vh;
+  font-size: 3vh;
+}
+
+.show {
+  width: 50%;
+  height: 87vh;
+  font-size: 3vh;
+  /* background: skyblue; */
+}
+
+.show > span {
+  display: inline-block;
+  width: 100%;
+  word-break: break-all;
+  white-space: normal;
+}
+
+
+/*文章内容显示列表*/
+.listBox {
+  width: 70vh;
+  height: 12vh;
+  border: 1px solid red;
+  margin: 0 auto;
+}
+
+.listTop {
+  width: 70vh;
+  height: 3vh;
+  display: flex;
+  justify-content: space-between;
+  font-size: 2vh;
+  /* background: skyblue; */
+}
+
+.listMiddle {
+  width: 70vh;
+  height: 5vh;
+  /* background: #1d7dfa; */
+  font-weight: bold;
+  font-size: 3vh;
+}
+
+.listDown {
+  width: 70vh;
+  height: 4vh;
+  font-size: 2.3vh;
+  overflow: hidden;
+  color: rgba(21, 0, 0, 0.6)
+}
+
+
+
+
+#allBox .header .menu {
+  position: absolute;
+  right: 60px;
+  top: 70px;
+  overflow: hidden;
+  background-color: #fff;
+  height: 130px;
+  width: 200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  border-radius: 4px;
+  transition: all .3s ease;
+  transform-origin: 100% 0;
+  transform: scale(0);
+  box-shadow: 0 0 4px 4px rgba(0, 0, 0, 0.1);
+}
+
+#allBox .header .menu .user-info {
+  display: flex;
+  align-items: center;
+}
+
+#allBox .header .menu .user-info .username {
+  font-size: 14px;
+  color: #252933;
+}
+
+#allBox .header .menu .user-info .menu-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+#allBox .header .menu .bottom-box {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  width: 90%;
+}
+
+#allBox .header .menu .bottom-box div {
+  width: 70px;
+  height: 30px;
+  text-align: center;
+  line-height: 30px;
+  color: #252933;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+#allBox .header .menu .bottom-box div:hover {
+  background-color: #F7F8FA;
+  border-radius: 4px;
+}

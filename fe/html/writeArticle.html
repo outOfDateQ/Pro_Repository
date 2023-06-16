@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>写文章页面</title>
+  <link rel="stylesheet" href="../css/reset.css">
+  <link rel="stylesheet" href="../css/writeArticle.css">
+</head>
+
+<body>
+  <div id="allBox">
+    <div class="header">
+      <div class="title">
+        <input type="text" placeholder="请输入标题..." ref="getInput">
+        <!-- @change="getSelect" -->
+        <select v-model="selected">
+          <option value="0" disabled>请选择分类</option>
+          <option id="1" value="综合">综合</option>
+          <option id="2" value="前端">前端</option>
+          <option id="3" value="后端">后端</option>
+        </select>
+        <input type="file" class="fileChange" @change="showImg" accept="image/png, image/jpeg, image/jpg">
+        <button @click="essayBuild">发布</button>
+        <button @click="essayChange">选择文章封面</button>
+        <img @click="toggleMenu" :src="userAvatar" alt="" class="userImg">
+      </div>
+      <div class="icon"></div>
+
+      <!-- 点击头像菜单 -->
+      <div class="menu" ref="menu">
+        <div class="user-info">
+          <img :src="this.userAvatar" alt="" class="menu-avatar">
+          <div class="username">{{this.username}}</div>
+        </div>
+        <div class="bottom-box">
+          <div class="my-page" @click="toMyPage">我的主页</div>
+          <div class="exit">退出登录</div>
+        </div>
+      </div>
+    </div>
+    <div class="context">
+      <div class="write">
+        <textarea ref="getTextarea" class="textBox" v-model.trim="message" placeholder="请输入内容..."></textarea>
+      </div>
+      <div class="show">
+        <img :src="pic" alt="" class="inputImg" v-show="play" @dblclick="deleteImg">
+        <span>{{ message }}</span>
+      </div>
+    </div>
+  </div>
+  <script src="../js/vue.js"></script>
+  <script src="../js/axios.js"></script>
+  <script>
+    const app = new Vue({
+      el: '#allBox',
+      data() {
+        return {
+          id: '',
+          token: '',
+          message: '',
+          pic: '',
+          selected: '0',
+          // selectArr: [
+          //   { id: 1, val: "综合" },
+          //   { id: 2, val: "前端" },
+          //   { id: 3, val: "后端" }
+          // ],
+          name: '',
+          userAvatar: '',
+          play: false,
+          essayData: {
+            titleData: '',
+            contentData: ''
+          },
+          username: ''
+        }
+      },
+      methods: {
+        // 切换显示/隐藏菜单
+        toggleMenu() {
+          const { width } = this.$refs.menu.getBoundingClientRect()
+          if (width === 0) {
+            this.$refs.menu.style.transform = 'scale(1)'
+          } else if (width === 200) {
+            this.$refs.menu.style.transform = 'scale(0)'
+          }
+        },
+
+        toMyPage() {
+          location.href = '../html/myPage.html'
+        },
+        //拿到input和textarea的输入值
+        essayBuild() {
+          this.essayData.titleData = this.$refs.getInput.value
+          this.essayData.contentData = this.$refs.getTextarea.value
+
+          if (!this.$refs.getInput.value || !this.$refs.getTextarea.value) {
+            return alert('请输入标题或文章内容')
+          }
+          if (!this.selected) {
+            return alert('请输入文章类型')
+          }
+          if (!this.pic) {
+            return alert('请选择文章封面')
+          }
+
+          /* 参数
+            id
+            articleTitle
+            articleContent
+            type
+            articleCoverImg
+          */
+          axios({
+            method: 'POST',
+            url: 'http://127.0.0.1:4000/api/publishArticle',
+            data: {
+              id: this.id,
+              userId: this.id,
+              articleTitle: this.essayData.titleData,
+              articleContent: this.essayData.contentData,
+              type: this.selected,
+              articleCoverImg: this.pic
+            },
+            headers: {
+              'Content-Type': 'application/json;cahrset=utf-8',
+              Authorization: 'Bearer ' + this.token
+            }
+          }).then(res => {
+            if (confirm('发布成功, 是否前往个人页面')) {
+              location.href = '../html/myPage.html'
+            }
+            this.essayData.titleData = ''
+            this.message = ''
+            this.essayData.contentData = ''
+            this.$refs.getInput.value = ''
+            this.$refs.getTextarea.value = ''
+            this.pic = ''
+            this.selected = '0'
+            this.play = false
+          })
+        },
+
+        //取到选择框中的值
+        // getSelect(e) {
+        //   let that = this
+        //   let hh = that.selectArr.filter((item, index, pre) => {
+        //     if (item.id == that.selected) {
+        //       return item
+        //     }
+        //   })
+        //   let dd = hh[0].val
+        //   this.name = dd
+        // },
+
+        //获取封面图片
+        showImg() {
+          try {
+            var fff = document.querySelector('.fileChange').files[0];
+            var reads = new FileReader();
+            reads.readAsDataURL(fff)
+            reads.onload = (ev) => {
+              this.pic = ev.target.result
+              this.play = true
+            }
+          } catch (error) {
+            return
+          }
+        },
+
+        // 选择封面图片按钮，图片的url为userAvatar，play决定文章是否有封面图片
+        essayChange() {
+          let ddd = document.querySelector('.fileChange')
+          ddd.click()
+          this.play = false
+        },
+
+        deleteImg() {
+          this.play = false
+          this.pic = ''
+        }
+      },
+
+      mounted() {
+        this.id = localStorage.id
+        this.token = localStorage.token
+
+        //请求获取个人资料
+        axios({
+          method: 'GET',
+          url: `http://127.0.0.1:4000/api/getUserData/${this.id}`,
+          headers: {
+            'Content-Type': 'application/json;charset=utf-8',
+            'Authorization': 'Bearer ' + this.token
+          }
+        }).then(res => {
+          this.userAvatar = res.data.data.userAvatar
+          this.username = res.data.data.username
+          if (this.username === res.data.data.registerTime) {
+            this.username = `用户${this.username}`
+          }
+        })
+
+      },
+    })
+  </script>
+</body>
+
+</html>

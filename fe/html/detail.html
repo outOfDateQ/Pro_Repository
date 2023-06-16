@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title></title>
+  <!-- <link rel="stylesheet" href="../assets/base.css"> -->
+  <link rel="stylesheet" href="../css/base.css">
+  <!-- <link rel="stylesheet" href="../assets/fonts/iconfont.css"> -->
+  <link rel="stylesheet" href="../css/iconfont.css">
+  <!-- <link rel="stylesheet" href="../css/detail.css"> -->
+  <link rel="stylesheet" href="../css/detail.css">
+</head>
+
+<body>
+  <div id="detail">
+    <!-- 顶部导航栏 -->
+    <div class="top-nav" v-cloak>
+      <div class="box">
+        <div class="left">
+          <div class="logo-box">
+            <img src="//lf3-cdn-tos.bytescm.com/obj/static/xitu_juejin_web/e08da34488b114bd4c665ba2fa520a31.svg" alt=""
+              class="logo">
+          </div>
+
+          <ul class="nav-list" v-for="(item, index) in navList" :key="index">
+            <li @click="toIndex(index)">{{item}}</li>
+          </ul>
+        </div>
+
+        <div class="right">
+          <div class="search-box">
+            <div class="search-input" ref="search">
+              <input @focus="handleFocus" @blur="handleBlur" type="text"
+                :placeholder="isFocus ? focusedPlaceholder : originPlaceholder">
+              <span class="iconfont icon-sousuo search-icon" ref="icon"></span>
+            </div>
+            <div @click="toWrite" class="create-article" ref="write">写文章</div>
+          </div>
+          <div @click="toggleMenu" class="avatar-box" v-if="userInfo">
+            <img :src="userInfo?.userAvatar" alt="">
+          </div>
+          <div class="login-box" v-else>
+            <span @click="toLogin">登录</span>
+            <span class="line"></span>
+            <span @click="toRegister">注册</span>
+          </div>
+        </div>
+
+
+        <div class="menu" ref="menu">
+          <div class="user-info">
+            <img :src="userInfo?.userAvatar" alt="" class="menu-avatar">
+            <div class="username">
+              {{ userInfo?.username}}
+            </div>
+          </div>
+          <div class="bottom-box">
+            <div class="my-page" @click="toMyPage">我的主页</div>
+            <div class="exit" @click="handleLogout">退出登录</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- 顶部导航栏 -->
+    <!-- <com-header :init="false"></com-header> -->
+    <!-- <public-header></public-header> -->
+    <div class="main" v-cloak>
+      <div class="container">
+        <div class="article">
+          <div class="article-header">
+            <h1 class="article-title">
+              {{ article.title }}
+            </h1>
+            <div class="author-container">
+              <div class="avatar-wrap">
+                <img :src="author?.userAvatar " class="avatar" v-if="author?.userAvatar">
+              </div>
+              <div class="author-info">
+                <div class="author-name">
+                  {{ article?.author?.username }}
+                </div>
+                <div class="article-time">
+                  {{ article.createAt | formatTime }}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="article-body">
+            <div class="article-image" v-if="article.coverImage">
+              <img :src="article.coverImage" alt="" class="cover-img">
+            </div>
+            <div class="article-content" v-html="article.content">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+  <script src="https://cdn.bootcdn.net/ajax/libs/axios/1.3.6/axios.js"></script>
+  <script src="https://cdn.bootcdn.net/ajax/libs/vue/2.6.5/vue.js"></script>
+  <script src="../js/detail.js" type="module"></script>
+</body>
+
+</html>

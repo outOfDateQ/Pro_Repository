@@ -1,0 +1,26 @@
+#index .main {
+  margin-top: 6rem;
+}
+#index .main .container {
+  position: relative;
+  display: flex;
+  width: 1000px;
+  margin: 0 auto;
+  padding: 20px 0;
+}
+#index .main .container .article-list {
+  width: 100%;
+}
+
+@media screen and (max-width: 1200px) {
+  #index .main .container {
+    width: 100%;
+  }
+  #index .main .container .home-aside {
+    display: none;
+  }
+  #index .main .container .article-list {
+    margin-left: 0;
+    width: 100%;
+  }
+}/*# sourceMappingURL=index.css.map */

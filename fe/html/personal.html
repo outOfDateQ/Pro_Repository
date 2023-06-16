@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>个人资料-掘金</title>
+  <link rel="stylesheet" href="../css/reset.css">
+  <link rel="stylesheet" href="../css/iconfont.css">
+  <link rel="stylesheet" href="../css/personal.css">
+  <script src="../js/vue.js"></script>
+  <script src="../js/axios.js"></script>
+</head>
+
+<body>
+  <div id="app">
+    <!-- 顶部导航栏 -->
+    <com-header :init="false"></com-header>
+    <!-- 页面主要内容 -->
+    <div class="personal-form" ref="mainBox" v-cloak>
+      <!-- 返回个人主页 -->
+      <div class="back" ref="back">
+        <span @click="backToMyPage" href="#" class="txt"><span class="iconfont icon-fanhuijiantou"></span>返回个人主页</span>
+      </div>
+      <!-- 表单 -->
+      <div class="form-wrap">
+        <div class="title">个人资料</div>
+        <div class="details">
+          <div class="left">
+            <div class="form">
+              <!-- 用户名 -->
+              <div class="username div">
+                <span>用户名</span>
+                <div :class="activeNumber === 0 ? 'active' : ''">
+                  <input @focus="focus(0)" @input="handleInputLength($event, 'username')"
+                    v-model.trim="userData.username" @click=" formFocus(0)" @blur="lostFocus"
+                    :class="activeNumber === 0 ? 'active' : ''" type="text" value="123456789" placeholder="请填写你的用户名">
+                  <span data-text="/20" :class="activeNumber === 0 ? 'active' : ''">{{usernameLength}}</span>
+                </div>
+              </div>
+              <!-- 职位 -->
+              <div class="position div">
+                <span>职位</span>
+                <div :class="activeNumber === 1 ? 'active' : ''">
+                  <input @focus="focus(1)" @input="handleInputLength($event, 'position')"
+                    v-model.trim="userData.position" @click=" formFocus(1)" @blur="lostFocus"
+                    :class=" activeNumber===1 ? 'active' : ''" type=" text" placeholder="请填写你的职位">
+                  <span data-text="/50" :class="activeNumber === 1 ? 'active' : ''">{{positionLength}}</span>
+                </div>
+              </div>
+              <!-- 公司 -->
+              <div class="company div">
+                <span>公司</span>
+                <div :class="activeNumber === 2 ? 'active' : ''">
+                  <input @focus="focus(2)" @input="handleInputLength($event, 'company')" v-model.trim="userData.company"
+                    @click=" formFocus(2)" @blur="lostFocus" :class=" activeNumber===2 ? 'active' : ''" type=" text"
+                    placeholder="请填写你的公司">
+                  <span data-text="/50" :class="activeNumber === 2 ? 'active' : ''">{{companyLength}}</span>
+                </div>
+              </div>
+              <!-- 个人主页 -->
+              <div class="personal-page div">
+                <span>个人主页</span>
+                <div :class="activeNumber === 3 ? 'active' : ''">
+                  <input @focus="focus(3)" @input="handleInputLength($event, 'personalPage')"
+                    v-model.trim="userData.personalPage" @click=" formFocus(3)" @blur="lostFocus"
+                    :class=" activeNumber===3 ? 'active' : ''" type=" text" placeholder="请填写你的个人主页">
+                  <span data-text="/50" :class="activeNumber === 3 ? 'active' : ''">{{personalPageLength}}</span>
+                </div>
+              </div>
+              <!-- 个人介绍 -->
+              <div class="personal-info div">
+                <span>个人介绍</span>
+                <!-- @mousedown="mousedownToChangeStyle" @mouseup="mouseuoToFocus" -->
+                <div :class="activeNumber === 4 ? 'active' : ''">
+                  <textarea ref="txtarea" @focus="focus(4)" @input="handleInputLength($event, 'personalInfo')"
+                    v-model.trim="userData.personalIntroduce" @click=" formFocus(4)" @blur="lostFocus"
+                    :class=" activeNumber === 4 ? 'active' : ''" cols=" 30" rows="5" placeholder="填写职业技能、擅长的事情、喜欢的事情等">
+                </textarea>
+                  <span data-text="/100" :class="activeNumber === 4 ? 'active' : ''"
+                    class="text-area-count">{{personalIntroduceLength}}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="right">
+            <div class="wrap">
+              <!-- 头像 -->
+              <label for="upload-file" class="avatar-box">
+                <div class="mask">
+                  <input id="upload-file" type="file" accept="image/png, image/jpeg, image/jpg" class="upload-avatar"
+                    @change="uploadAvatar">
+                  <span class="icon">＋</span>
+                  <span class="text">点击修改头像</span>
+                </div>
+                <img :src="userData.userAvatar" alt="" class="avatar">
+              </label>
+              <span class="name">我的头像</span>
+              <span class="explain">支持 jpg、png、jpeg 格式大小 2MB 以内的图片</span>
+            </div>
+          </div>
+        </div>
+        <!-- 保存按钮 -->
+        <div class="save" @click="submit">保存修改</div>
+      </div>
+    </div>
+
+    <!-- 提示模态框 -->
+    <div class="outer-mask" :class="showModel ? 'show' : ''">
+      <div class="modal-box">
+        <span class="text">{{modelInfo}}</span>
+        <div class="confirm" @click="closeModel(modelInfo)">确定</div>
+      </div>
+    </div>
+  </div>
+
+
+  <script type="module">
+    // 获取axios二次封装的函数, 方便用于后续发请求
+    // import { sendPostAjax, sendGetAjax } from './js/request.js'
+    import { sendPostAjax, sendGetAjax } from '../js/request.js'
+    import ComHeader from '../js/header.js'
+    import * as api from '../js/api.js'
+    import '../js/pubsubJS.js'
+
+    new Vue({
+      el: '#app',
+      components: {
+        ComHeader
+      },
+      data() {
+        return {
+          activeNumber: null,
+          userData: {
+            username: '',
+            position: '',
+            company: '',
+            personalPage: '',
+            personalIntroduce: '',
+            userAvatar: '',
+            userId: ''
+          },
+          usernameLength: 0,
+          positionLength: 0,
+          companyLength: 0,
+          personalPageLength: 0,
+          personalIntroduceLength: 0,
+          modelInfo: '',
+          showModel: false,
+
+          // 头部数据
+          navList: ['首页', '沸点', '课程', '直播', '活动', '竞赛', '商城'],
+          originPlaceholder: '搜索稀土掘金',
+          focusedPlaceholder: '搜索文章/小册/标签/用户',
+          isFocus: false,
+          isLogin: true,
+          id: '',
+          token: '',
+          // usernameData: []
+        }
+      },
+
+      methods: {
+        getUserInfo() {
+          const user = JSON.parse(localStorage.getItem('userinfo'))
+          if (!user) {
+            console.log(user)
+            return this.userInfo = null
+          }
+          this.userInfo = user
+        },
+        exitLogin() {
+          localStorage.removeItem('id')
+          localStorage.removeItem('token')
+          location.href = '../html/homepage.html'
+        },
+
+        backToMyPage() {
+          location.href = '../html/myPage.html'
+        },
+        toWrite() {
+          location.href = '../html/editor.html'
+        },
+
+        // 切换显示/隐藏菜单
+        toggleMenu() {
+          const { width } = this.$refs.menu.getBoundingClientRect()
+          if (width === 0) {
+            this.$refs.menu.style.transform = 'scale(1)'
+          } else if (width === 200) {
+            this.$refs.menu.style.transform = 'scale(0)'
+          }
+        },
+
+        toMyPage() {
+          location.href = '../html/myPage.html'
+        },
+
+        toIndex(index) {
+          if (index === 0) {
+            location.href = '../html/homepage.html'
+          }
+        },
+        // *****************************************************
+
+        // 输入框获取焦点
+        formFocus(currentActiveNumber) {
+          this.activeNumber = currentActiveNumber
+        },
+
+        // 输入框失去焦点
+        lostFocus() {
+          this.activeNumber = null
+        },
+
+        // 提交用户数据
+        async submit() {
+          if (!this.userData.username) {
+            this.modelInfo = '用户名必须填写'
+            this.showModel = true
+            return
+          }
+
+          //#region 没有封装发送axios请求
+          // let res = await axios({
+          //   method: 'POST',
+          //   // 此处的id应该是登录的时候保存到某个地方, 然后从那个地方获取
+          //   url: `http://localhost:4000/api/updateUserData/${id}`,
+          //   data: this.userData,
+          //   headers: {
+          //     'Content-Type': 'application/json;charset=utf-8',
+          //     Authorization: `Bearer ${token}`
+          //   }
+          // })
+          //#endregion
+          let res = await sendPostAjax('POST', 'updateUserData', this.userData, this.id, this.token)
+          // 说明当前用户名被注册了
+          if (res.data.code === 400) {
+            this.modelInfo = res.data.msg
+            this.showModel = true
+            return
+          }
+
+          const { username, position, company, personalPage, personalIntroduce, userAvatar, userId } = res.data.data
+          let resUserData = { username, position, company, personalPage, personalIntroduce, userAvatar, userId }
+          this.userData = resUserData
+
+          // console.log(this.userData.userId, this.userData.username)
+
+          let data = await axios({
+            method: 'POST',
+            url: `http://127.0.0.1:4000/api/changeArticleUsername`,
+            data: {
+              username: this.userData.username,
+              userId: this.userData.userId
+            },
+            headers: {
+              'Content-Type': 'application/json;charset=utf-8',
+              Authorization: 'Bearer ' + this.token
+            }
+          })
+
+          // this.usernameData.forEach(item => {
+          //   if (item.userId === data.data.data.userId) {
+          //     item.username = data.data.data.username
+          //   } else {
+          //     console.log(11);
+          //     this.usernameData.push({
+          //       username: data.data.data.username,
+          //       userId: data.data.data.userId
+          //     })
+          //   }
+          // })
+
+
+          // localStorage.localUsernameData = []
+
+          // let usernameData = localStorage.usernameData
+          // this.usernameData.push({
+          //   username: data.data.data.username,
+          //   userId: data.data.data.userId
+          // })
+
+
+          // localStorage.localUsernameData = JSON.stringify(this.usernameData)
+
+
+          // localStorage.localUsernameData = JSON.stringify({
+          //   username: data.data.data.username,
+          //   userId: data.data.data.userId
+          // })
+
+          // PubSub.publish('changeName', {
+          //   username: data.data.data.username,
+          //   userId: data.data.data.userId
+          // })
+          const user = await api.getUserInfo()
+          localStorage.setItem('userinfo', JSON.stringify(user.data))
+          this.modelInfo = '个人资料修改成功'
+          this.showModel = true
+        },
+
+        // 判断用户输入数据长度
+        handleInputLength(ev, type) {
+          const { userData } = this
+          switch (type) {
+            case 'username':
+              this.usernameLength = userData.username.length
+              if (this.usernameLength > 20) {
+                this.usernameLength = 20
+                userData.username = ev.target.value.slice(0, 20)
+              }
+              break
+            case 'position':
+              this.positionLength = userData.position.length
+              if (this.positionLength > 50) {
+                this.positionLength = 50
+                userData.position = ev.target.value.slice(0, 50)
+              }
+              break
+            case 'company':
+              this.companyLength = userData.company.length
+              if (this.companyLength > 50) {
+                this.companyLength = 50
+                userData.company = ev.target.value.slice(0, 50)
+              }
+              break
+            case 'personalPage':
+              this.personalPageLength = userData.personalPage.length
+              if (this.personalPageLength > 50) {
+                this.personalPageLength = 50
+                userData.personalPage = ev.target.value.slice(0, 50)
+              }
+              break
+            case 'personalInfo':
+              this.personalIntroduceLength = userData.personalIntroduce.length
+              if (this.personalIntroduceLength > 100) {
+                this.personalIntroduceLength = 100
+                userData.personalIntroduce = ev.target.value.slice(0, 100)
+              }
+              break
+          }
+        },
+
+        // 输入框获取焦点
+        focus(currentFocusNumber) {
+          this.activeNumber = currentFocusNumber
+        },
+
+        // 上传头像(预览)
+        uploadAvatar(ev) {
+          // 获取到当前图片
+          let imgFile = ev.target.files[0]
+          // 设置上传图片最大内存, 最大为2MB
+          let imgMaxSize = 1024 * 1024 * 2
+
+          // 判断是否是允许上传的图片类型
+          if (!['jpeg', 'jpg', 'png'].includes(imgFile.type.split('/')[1])) {
+            this.modelInfo = '仅支持 .jpeg .png .jpg格式的图片'
+            this.showModel = true
+            return
+          }
+
+          // 判断当前图片是否超过2MB
+          if (imgFile.size > imgMaxSize) {
+            this.modelInfo = '上传图片不能超过2MB'
+            this.showModel = true
+            return
+          }
+
+          // 创建reader实例
+          let reader = new FileReader()
+          // 把图片读取成base64格式的数据
+          reader.readAsDataURL(imgFile)
+          // 当reader操作执行完毕, 再调用回调
+          reader.onload = (ev) => {
+            // 获取到把图片格式转换后的数据: ev.target.result
+            // 把img.src设置为该数据, 就可以实现图片的预览
+            this.userData.userAvatar = ev.target.result
+
+            // this.modelInfo = '修改图片成功'
+            // this.showModel = true
+          }
+        },
+
+        // 关闭模态框
+        closeModel(modelInfo) {
+          this.showModel = false
+          setTimeout(() => {
+            this.modelInfo = ''
+            if (modelInfo === '个人资料修改成功') {
+              location.href = '../html/myPage.html'
+            }
+          }, 300)
+        },
+
+        // 个人介绍点击拖动的交互
+        // mousedownToChangeStyle() {
+        //   this.activeNumber = 4
+        // },
+
+        // // 个人介绍点击拖动的交互
+        // mouseuoToFocus() {
+        //   this.$refs.txtarea.focus()
+        // },
+
+        // 头部导航栏部分
+        handleFocus() {
+          this.$refs.search.style.width = 375 + 'px'
+          this.$refs.write.style.right = -95 + 'px'
+          this.$refs.search.style.border = '1px solid #1E80FF'
+          this.$refs.icon.style.backgroundColor = '#EAF2FF'
+          this.$refs.icon.style.color = '#1E80FF'
+          this.$refs.icon.style.cursor = 'pointer'
+          this.isFocus = true
+        },
+
+        handleBlur() {
+          this.$refs.search.style.width = 260 + 'px'
+          this.$refs.write.style.right = 0 + 'px'
+          this.$refs.search.style.border = '1px solid #D5D9DF'
+          this.$refs.icon.style.backgroundColor = '#F2F3F5'
+          this.$refs.icon.style.color = '#515767'
+          this.$refs.icon.style.cursor = 'default'
+          this.isFocus = false
+        }
+      },
+
+      // watch: {
+      //   showModel(oldVal, newVal) {
+      //   }
+      // },
+
+      mounted() {
+        this.id = localStorage.id
+        this.token = localStorage.token
+        // 当前页面挂载的时候发请求获取当前用户数据
+        sendGetAjax('GET', 'getUserData', this.id, this.token)
+          .then(res => {
+            const { username, position, company, personalPage, personalIntroduce, userAvatar, registerTime } = res.data.data
+            let resUserData = { position, company, personalPage, personalIntroduce, userAvatar }
+            this.userData = resUserData
+            this.userData.username = username
+            // 判断是否是最初默认的用户名
+            if (username === registerTime) {
+              this.userData.username = `用户${username}`
+            }
+            this.usernameLength = this.userData.username.length
+            this.positionLength = this.userData.position.length
+            this.companyLength = this.userData.company.length
+            this.personalPageLength = this.userData.personalPage.length
+            this.personalIntroduceLength = this.userData.personalIntroduce.length
+
+            // 能能进入到个人资料页面说明已经登录了, 所以可以直接获取到头像数据
+            // this.isLogin = true
+          })
+      }
+    })
+  </script>
+</body>
+
+</html>

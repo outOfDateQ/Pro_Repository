@@ -1,0 +1,148 @@
+.login-wrap {
+  background-color: white;
+  padding: 20px;
+}
+.login-wrap .loginTop {
+  height: 60px;
+  line-height: 60px;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 30px;
+  font-size: 20px;
+  color: #999;
+  font-family: Microsoft YaHei;
+}
+.login-wrap .loginTop .loginTop-span2 {
+  cursor: pointer;
+}
+.login-wrap .line {
+  width: inherit;
+  height: 1px;
+  background-color: #ccc;
+}
+.login-wrap .loginUnder {
+  margin-top: 15px;
+}
+.login-wrap .loginUnder .mm {
+  top: 20px;
+  color: #1e80ff;
+  text-align: center;
+  font-size: 20px;
+  font-family: Microsoft YaHei;
+}
+.login-wrap .loginUnder .loginUnder-form {
+  text-align: center;
+  margin-top: 15px;
+}
+.login-wrap .loginUnder .loginUnder-form .form-item {
+  margin: 10px;
+}
+.login-wrap .loginUnder .loginUnder-form .form-item input {
+  outline: none;
+  border-width: 1px;
+  border-color: #1e80ff;
+  border-radius: 5px;
+  padding-left: 20px;
+  width: 300px;
+  height: 40px;
+}
+.login-wrap .loginUnder .loginUnder-form .form-item button {
+  border: none;
+  background-color: #1e80ff;
+  color: #fff;
+  border-radius: 5px;
+  width: 323px;
+  height: 40px;
+  font-family: Microsoft YaHei;
+}
+.login-wrap .other {
+  margin-top: 10px;
+  font-size: 15px;
+  color: #999;
+  font-family: Microsoft YaHei;
+  display: flex;
+  justify-content: space-between;
+}
+.login-wrap .other span {
+  padding: 0 110px;
+}
+.login-wrap .other .other-span2 {
+  cursor: pointer;
+}
+.login-wrap .bottom {
+  font-size: 10px;
+  margin-top: 20px;
+  font-family: Microsoft YaHei;
+  color: #ccc;
+  text-align: center;
+}
+
+.regTop {
+  height: 60px;
+  line-height: 60px;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 30px;
+  font-size: 20px;
+  color: #999;
+  font-family: Microsoft YaHei;
+}
+.regTop .regTop-span2 {
+  cursor: pointer;
+}
+
+.line {
+  width: inherit;
+  height: 1px;
+}
+
+.regUnder {
+  margin-top: 15px;
+}
+.regUnder .mm {
+  top: 20px;
+  color: #1e80ff;
+  text-align: center;
+  font-size: 20px;
+  font-family: Microsoft YaHei;
+}
+.regUnder .regUnder-form {
+  text-align: center;
+  margin-top: 15px;
+}
+.regUnder .regUnder-form .form-item {
+  margin: 10px;
+}
+.regUnder .regUnder-form .form-item input {
+  outline: none;
+  border-width: 1px;
+  border-color: #1e80ff;
+  border-radius: 5px;
+  padding-left: 20px;
+  width: 300px;
+  height: 40px;
+}
+.regUnder .regUnder-form .form-item button {
+  border: none;
+  background-color: #1e80ff;
+  color: #fff;
+  border-radius: 5px;
+  width: 323px;
+  height: 40px;
+  font-family: Microsoft YaHei;
+}
+.regUnder .regUnder-form .key {
+  font-family: Microsoft YaHei;
+}
+
+.bottom {
+  border: none;
+  font-size: 10px;
+  margin-top: 20px;
+  font-family: Microsoft YaHei;
+  color: #ccc;
+  text-align: center;
+}
+.bottom span span {
+  cursor: pointer;
+}/*# sourceMappingURL=login.css.map */
